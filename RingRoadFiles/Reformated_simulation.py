@@ -187,12 +187,12 @@ class BandoFtl:
         data_var = np.var(velocities_history)
         return data_var
     
-    def run_system(self, v0):
+    def run_system(self):
         # Run a simulation for each car
         for i in range(1, self.num_vehicles):
 
             self.init_positions[i] = (self.init_positions[i - 1] - self.init_headway) % self.params['circum']
-            self.init_velocities[i] = v0
+            self.init_velocities[i] = self.v0
 
         positions_history, velocities_history, perturbed_history = self.rk4(self.init_positions, self.init_velocities, self.params, self.dt)
         vel_std_history = np.std(velocities_history, axis=1)
@@ -293,6 +293,7 @@ params = {
 
 manager = BandoFtl(params, 500)
 
-manager.run_system(manager.v0)
+manager.run_system()
 
-print(manager.run_simulation(0.5, 20.0, params))
+# For statistics
+# print(manager.run_simulation(0.5, 20.0, params))
